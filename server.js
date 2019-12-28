@@ -8,6 +8,7 @@ const router = new Router();
 const multer = require('multer');
 const fs = require('fs');
 const csv=require('fast-csv');
+const port=process.env.PORT||5000;
 const catSchema =require('./schemas/user-data');
 const csvSchema =require('./schemas/csv');
 const upload = multer({ dest: 'tmp/csv/' });
@@ -28,60 +29,60 @@ connectDb();
 router.post('/data',upload.single('my-file'),async (req,res)=>{
 
 try{
-  const fileRows = [];
-  csv.fromPath(req.file.path)
-   .on("data", function (data) {
-     fileRows.push(data); // push each row
-   })
-   .on("end", function () {
+  // const fileRows = [];
+  // csv.fromPath(req.file.path)
+  //  .on("data", function (data) {
+  //    fileRows.push(data); // push each row
+  //  })
+  //  .on("end", function () {
      
-       let i=1;
-       console.log(fileRows.length);
+  //      let i=1;
+  //      console.log(fileRows.length);
       
-      while(i!=fileRows.length){
+  //     while(i!=fileRows.length){
       
-       let dataSchema=new csvSchema({
-        "id" :`${fileRows[i][0]}`,
-        "user_id" :`${fileRows[i][1]}`,
-        "vehical_model_id" :`${fileRows[i][2]}`,
-        "package_id" :`${fileRows[i][3]}`,
-        "travel_type" :`${fileRows[i][4]}`,
-        "from_area_id" :`${fileRows[i][5]}`,
-        "to_area_id" :`${fileRows[i][6]}`,
-        "from_city_id" :`${fileRows[i][7]}`,
-        "to_city_id" :`${fileRows[i][8]}`,
-        "from_data" :`${fileRows[i][9]}`,
-        "to_data" :`${fileRows[i][10]}`,
-        "online_booking" :`${fileRows[i][11]}`,
-        "mobile_booking" :`${fileRows[i][12]}`,
-        "booking_created" :`${fileRows[i][13]}`,
-        "from_lat" :`${fileRows[i][14]}`,
-        "from_long" :`${fileRows[i][15]}`,
-        "to_lat" :`${fileRows[i][16]}`,
-        "to_long" :`${fileRows[i][17]}`,
-        "car_cancel" :`${fileRows[i][18]}`
-       });   
+  //      let dataSchema=new csvSchema({
+  //       "id" :`${fileRows[i][0]}`,
+  //       "user_id" :`${fileRows[i][1]}`,
+  //       "vehical_model_id" :`${fileRows[i][2]}`,
+  //       "package_id" :`${fileRows[i][3]}`,
+  //       "travel_type" :`${fileRows[i][4]}`,
+  //       "from_area_id" :`${fileRows[i][5]}`,
+  //       "to_area_id" :`${fileRows[i][6]}`,
+  //       "from_city_id" :`${fileRows[i][7]}`,
+  //       "to_city_id" :`${fileRows[i][8]}`,
+  //       "from_data" :`${fileRows[i][9]}`,
+  //       "to_data" :`${fileRows[i][10]}`,
+  //       "online_booking" :`${fileRows[i][11]}`,
+  //       "mobile_booking" :`${fileRows[i][12]}`,
+  //       "booking_created" :`${fileRows[i][13]}`,
+  //       "from_lat" :`${fileRows[i][14]}`,
+  //       "from_long" :`${fileRows[i][15]}`,
+  //       "to_lat" :`${fileRows[i][16]}`,
+  //       "to_long" :`${fileRows[i][17]}`,
+  //       "car_cancel" :`${fileRows[i][18]}`
+  //      });   
        
-      dataSchema.save(function(err,data){
-       if(err)
-       {
-          console.log(err);
-       }
-       else{
-         console.log("done");
-       }
-   })
+  //     dataSchema.save(function(err,data){
+  //      if(err)
+  //      {
+  //         console.log(err);
+  //      }
+  //      else{
+  //        console.log("done");
+  //      }
+  //  })
        
        
-       i++;
-      }
+  //      i++;
+  //     }
  
-     fs.unlinkSync(req.file.path);   // remove temp file
-     //process "fileRows" and respond
+  //    fs.unlinkSync(req.file.path);   // remove temp file
+  //    //process "fileRows" and respond
   
-   })
+  //  })
 
-   res.json({status:"ok"});
+   res.json({status:"file upload is disabled for now"});
   
 }
 catch(err){
@@ -258,6 +259,6 @@ app.use('/', express.static(__dirname + '/build'));
  
 
 
-app.listen(5000, function () {
+app.listen(port, function () {
     console.log('Dev app listening on port 5000!');
 });
